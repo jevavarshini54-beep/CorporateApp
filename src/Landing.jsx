@@ -2,9 +2,11 @@ import React from "react";
 import {motion} from "framer-motion";
 import "./Landing.css";
 import Carousel from "./components/Carousel.jsx";
+import { useNavigate } from "react-router-dom";
 
-function Landing({onselect}) {
+function Landing() {
 
+    const navigate = useNavigate();
     const itemVariants = {initial: {opacity: 0, y:20}, 
                           animate: {y:0, opacity: 1,
                           transition: {duration: 0.5}}
@@ -36,9 +38,9 @@ function Landing({onselect}) {
                 <Carousel />
             </div>
             <motion.div className="bottom_container" variants={btnContainer} initial="initial" animate="animate">
-                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('dashboard')} className="tab_buttons">Dashboard</motion.button>
-                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('calendar')} className="tab_buttons">Calendar</motion.button>
-                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('todos')} className="tab_buttons">To Do</motion.button>
+                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/dashboard')} className="tab_buttons">Dashboard</motion.button>
+                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/calendar')} className="tab_buttons">Calendar</motion.button>
+                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/todos')} className="tab_buttons">To Do</motion.button>
             </motion.div>
         </div>
     );

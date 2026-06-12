@@ -1,9 +1,13 @@
 import React from "react";
+import { motion } from "framer-motion";
+import './NotFound.css'
 
-export default function NotFound() {
+function NotFound() {
+
   return (
-    <div style={{ padding: "2rem", color: "#fff" }}>
-      <h2>NotFound View Placeholder</h2>
-    </div>
+    <motion.div className="page_404">
+        <motion.div className="error_404">404</motion.div>
+        <motion.div className="no_page">Page not found</motion.div>
+    </motion.div>
   );
-}
+} export default NotFound;

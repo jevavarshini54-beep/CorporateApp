@@ -1,0 +1,30 @@
+.error_404, .no_page{
+	font-size: 15rem;
+	text-align: center;
+	margin-top: 4rem;
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse{
+  from{
+    filter:
+						drop-shadow(0 0 1px powderblue)
+						drop-shadow(0 0 5px powderblue);
+  }
+
+  to{
+		filter:
+						drop-shadow(0 0 5px powderblue)
+						drop-shadow(0 0 2px powderblue)
+						drop-shadow(0 0 1px powderblue);
+    }
+}
+
+body{
+	color: black;
+}
+
+.no_page{
+	text-align: center;
+	font-size: 6rem;
+}
