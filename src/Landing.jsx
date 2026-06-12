@@ -1,6 +1,7 @@
 import React from "react";
 import {motion} from "framer-motion";
 import "./Landing.css";
+import Carousel from "./components/Carousel.jsx";
 
 function Landing({onselect}) {
 
@@ -19,6 +20,7 @@ function Landing({onselect}) {
     };
 
     const btnContainer = {
+                            initial : {},
                             animate: {transition: {delayChildren: 0.5, staggerChildren: 0.5}}
     };
 
@@ -30,8 +32,10 @@ function Landing({onselect}) {
                 <motion.h3 variants={itemVariants}>Track projects, deadlines, and progress effortlessly.</motion.h3>
             </motion.div>
 
-            <div className="right_container"></div>
-            <motion.div className="bottom_container" variants={btnContainer}>
+            <div className="right_container">
+                <Carousel />
+            </div>
+            <motion.div className="bottom_container" variants={btnContainer} initial="initial" animate="animate">
                 <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('dashboard')} className="tab_buttons">Dashboard</motion.button>
                 <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('calendar')} className="tab_buttons">Calendar</motion.button>
                 <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => onselect('todos')} className="tab_buttons">To Do</motion.button>
