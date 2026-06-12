@@ -39,7 +39,7 @@ function Landing() {
             </div>
             <motion.div className="bottom_container" variants={btnContainer} initial="initial" animate="animate">
                 <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/dashboard')} className="tab_buttons">Dashboard</motion.button>
-                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/calendar')} className="tab_buttons">Calendar</motion.button>
+                <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/calendars')} className="tab_buttons">Calendar</motion.button>
                 <motion.button variants={buttonHoverEffects} initial="initial" animate="animate" whileHover="hover" whileTap="tap" onClick={() => navigate('/todos')} className="tab_buttons">To Do</motion.button>
             </motion.div>
         </div>

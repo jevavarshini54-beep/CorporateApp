@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Landing from "./Landing";
 import Dashboard from "./Dashboard";
 import NotFound from "./NotFound";
-import Calendar from "./Calendar";
+import Calendars from "./Calendars";
 import Todo from "./Todo";
 
 function App() {
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calendars" element={<Calendars />} />
         <Route path="/todos" element={<Todo />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
