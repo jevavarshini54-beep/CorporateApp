@@ -1,4 +1,4 @@
-import { IconLayoutDashboard, IconCalendar, IconChecklist, IconUsers, IconChartBar } from "@tabler/icons-react";
+import { IconTrash, IconLayoutDashboard, IconCalendar, IconChecklist, IconUsers, IconChartBar } from "@tabler/icons-react";
 import {motion, transform} from "framer-motion";
 
 const cards = [

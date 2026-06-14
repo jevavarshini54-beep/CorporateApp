@@ -4,7 +4,7 @@ import Landing from "./Landing";
 import Dashboard from "./Dashboard";
 import NotFound from "./NotFound";
 import Calendars from "./Calendars";
-import Todo from "./Todo";
+import ToDo from "./ToDo";
 
 function App() {
 
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/calendars" element={<Calendars />} />
-        <Route path="/todos" element={<Todo />} />
+        <Route path="/todos" element={<ToDo />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

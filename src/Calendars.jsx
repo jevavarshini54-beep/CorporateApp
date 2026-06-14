@@ -85,7 +85,7 @@ function Calendars() {
                   <p>{selectedDate.toDateString()}</p>
                 </div>
 
-                <motion.div className="close_btn" onClick={() => setShowpopup(false)} whileHover={{pointer: "cursor"}} whileTap={{pointer: "cursor"}}
+                <motion.div className="close_btn" onClick={() => setShowpopup(false)}
                   whileHover={{ scale: 1.2}} whileTap={{scale: 1}} transition={{type: "spring", stiffness: 20, damping: 1000}}>X</motion.div>
               </div>
 
