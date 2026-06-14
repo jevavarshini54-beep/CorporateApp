@@ -20,6 +20,11 @@
 	flex-direction: column;
 }
 
+.right_panel{
+	display: flex;
+	flex-direction: column;
+}
+
 .panel_header {
   display: flex;
   align-items: center;
@@ -46,7 +51,7 @@
 	color: powderblue;
 }
 
-.task_card{
+.task_card, .comp_card{
 	border: 2px solid #2a2a2a;
 	border-radius: 1rem;
 	padding: 0.5rem;
@@ -103,4 +108,41 @@
 	position: absolute;
 	top: 0.2rem;
 	right: 0.2rem;
+}
+
+.right_panel{
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+}
+
+.stats, .completed_panel{
+	border: 2px solid #222;
+	border-radius: 1.5rem;
+}
+
+.completed_title{
+	margin-bottom: 1.0rem;
+	margin-top: 0.9rem;
+	margin-left: 1.5rem;
+	font-size: 1.07rem;
+	color: powderblue;
+}
+
+.comp_card{
+	margin-left: 1.6rem;
+	margin-right: 1.6rem;
+}
+
+.all_charts{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 1.8rem;
+}
+
+.task_status{
+	color: powderblue;
+	margin-left: 0.9rem;
+	margin-top: 1rem;
 }
