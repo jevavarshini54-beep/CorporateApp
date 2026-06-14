@@ -1,4 +1,5 @@
-import { animate, AnimatePresence, delay, motion, stagger } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { IconTrash, IconChecklist } from "@tabler/icons-react";
 import './ToDo.css'
 import { useState } from "react";
 
@@ -17,12 +18,28 @@ function ToDo() {
 
   const priorityType = (p) => p === "high" ? "High" : p === "medium" ? "Moderate" : "Low";
   const priorityColor = (p) => p === "high" ? "rgb(70, 255, 70)" : p === "medium" ? "rgb(255, 255, 46)" : "red";
+  const [completed, setCompleted] = useState([]);
 
-  const cardvariants = {initial: {opacity: 0, x: -50},
+  const cardVariants = {initial: {opacity: 0, x: -50},
                         animate: {opacity: 1, x:0, transition: {duration: 0.3, type: "spring", stiffness: 200, damping: 27}},
                         exit: {opacity: 0, x: -40, transition: {duration: 0.3}}};
 
-  const containervariants = {initial: {}, animate: {transition: {staggerChildren: 0.4, delayChildren: 0.4}}};
+  const containerVariants = {initial: {}, animate: {transition: {staggerChildren: 0.4, delayChildren: 0.4}}};
+
+  const deleteTask = (id) => {
+    setTasks(p => p.filter(t => t.id !==id))
+  }
+
+  const markDone = (id) => {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    setTasks(p => p.filter(t => t.id !== id))
+    setCompleted(p => [task, ...p])
+  };
+
+  const deleteCompleted = (id) => {
+    setCompleted(prev => prev.filter(t => t.id !== id));
+  };
 
   return (
     <motion.div className="todo_page" initial={{opacity: 0, y: 40}} animate={{opacity: 1, y: 0}} transition={{duration: 0.8, ease: "easeOut"}}>
@@ -35,13 +52,19 @@ function ToDo() {
           <motion.button className="add_task_btn" whileHover={{scale: 1.07}}>+ Add Task</motion.button>
         </div>
 
-        <motion.div variants={containervariants} initial="initial" animate="animate">
+        <motion.div variants={containerVariants} initial="initial" animate="animate">
           <AnimatePresence>
             {tasks.map(t => (
-              <motion.div key= {t.id} variants={cardvariants} initial="initial" animate="animate" className="task_card">
+              <motion.div key= {t.id} variants={cardVariants} initial="initial" animate="animate" className="task_card">
                 <div className="card_top">
                   <div className="dot" style={{backgroundColor: priorityColor(t.priority)}}></div>
                   <span className="card_title">{t.title}</span>
+                  <div className="done_del">
+                    <motion.button className="done_btn" onClick={() => markDone(t.id)}
+                      whileHover={{scale: 1.09}} whileTap={{scale: 0.9}}><IconChecklist size={30} color="powderblue"></IconChecklist></motion.button>
+                    <motion.button className="del_btn" onClick={() => deleteTask(t.id)}
+                      whileHover={{scale: 1.09}} whileTap={{scale: 0.9}}><IconTrash size={30} color="powderblue"></IconTrash></motion.button>
+                  </div>
                 </div>
                 <div className="desc">{t.desc}</div>
                 <div className="card_bottom">
