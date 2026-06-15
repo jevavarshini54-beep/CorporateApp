@@ -3,7 +3,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   padding: 2rem;
-  min-height: 90vh;
 
 	width: 80%;
   background: black;
@@ -195,4 +194,32 @@
 .ring_pct, .chart_label{
 	color: powderblue;
 	font-family: 1.04rem;
+}
+
+.canvas_todo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.todo_page > div {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 878px) {
+	.todo_page{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.left_panel, .right_panel{
+		width: 150%;
+	}
+
+	.card_bottom{
+		gap: 1rem;
+	}
 }

@@ -1,10 +1,15 @@
 .react-calendar{
-    width: 35rem;
+    min-width: 35rem;
 }
 
 .react-calendar__month-view__weekdays{
     margin-top: 1.2rem;
     margin-bottom: 0.4rem;
+}
+
+body{
+    overflow-y: auto;
+    overflow-x: auto;
 }
 
 .react-calendar__tile{
@@ -49,7 +54,6 @@
     gap: 12rem;
 
     position: relative;
-    overflow: hidden;
  }
 
  .popup{
@@ -75,6 +79,7 @@
     position: absolute;
     top: 1.9px;
     right: 1.9px;
+    cursor: pointer;
  }
 
  .meeting_dot {
@@ -188,4 +193,26 @@
 .calendar_page > div {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .calendar_page{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .react-calendar__tile{
+        height: 4rem;
+    }
+
+    .react-calendar{
+        min-width: 29rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1400px) {
+    .calendar_page{
+        display: flex;
+        flex-direction: column;
+    }
 }

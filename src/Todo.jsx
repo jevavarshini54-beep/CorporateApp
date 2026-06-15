@@ -1,9 +1,56 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { IconTrash, IconChecklist } from "@tabler/icons-react";
 import './ToDo.css'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function ToDo() {
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+    const Canvas = canvasRef.current;
+    const ctx = Canvas.getContext('2d');
+  
+    function reSize() {
+      Canvas.height = window.innerHeight;
+      Canvas.width = window.innerWidth;
+    }
+    reSize();
+  
+    window.addEventListener('resize', reSize);
+  
+    const particles = Array.from({length : 100}, () => ({
+      x: Math.random()*Canvas.width, y: Math.random()*Canvas.height,
+      r: 1.5 + Math.random()*4, dx: ((Math.random())-0.5)*0.5,
+      dy: -0.2-((Math.random())*0.5), alpha: 0.2 + Math.random() * 0.5,
+      color: Math.random() > 0.5 ? 'powderblue' : 'white'
+    }));
+  
+    let animation;
+    function draw() {
+      ctx.clearRect(0, 0, Canvas.width, Canvas.height);
+      particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.y < -p.r) { p.y = Canvas.height + p.r; p.x = Math.random() * Canvas.width; }
+      if (p.x < -p.r) p.x = Canvas.width + p.r;
+      if (p.x > Canvas.width + p.r) p.x = -p.r;
+      });
+      animation = requestAnimationFrame(draw);
+    }
+    draw();
+  
+    return () => {
+      cancelAnimationFrame(animation);
+      window.removeEventListener('resize', reSize);
+    };
+  }, []);
+  
 
   const [tasks, setTasks] = useState([
     { id: 1, title: "Team standup meeting", desc: "Discuss sprint progress and blockers", priority: "medium", time: "10:00 AM", status: "Not Started" },
@@ -103,6 +150,7 @@ function ToDo() {
 
   return (
     <motion.div className="todo_page" initial={{opacity: 0, y: 40}} animate={{opacity: 1, y: 0}} transition={{duration: 0.8, ease: "easeOut"}}>
+      <canvas ref={canvasRef} className="canvas_todo"></canvas>
       <div className="left_panel">
         <div className="panel_header">
           <div>
@@ -144,7 +192,7 @@ function ToDo() {
         <motion.div variants={containerVariants} initial="initial" animate="animate">
           <AnimatePresence>
             {tasks.map(t => (
-              <motion.div key= {`comp-${t.id}`} variants={cardVariants} initial="initial" animate="animate" className="task_card">
+              <motion.div key= {`completed-${t.id}`} variants={cardVariants} initial="initial" animate="animate" className="task_card">
                 <div className="card_top">
                   <div className="dot" style={{backgroundColor: statusColor(t.status)}}></div>
                   <span className="card_title">{t.title}</span>
@@ -209,20 +257,20 @@ function ToDo() {
               <motion.p className="no_comp" initial={{opacity: 0}} animate={{opacity: 1}}>
                 No completed tasks yet
               </motion.p>) : (
-                completed.map(t => (
-                  <motion.div variants={cardVariants} initial="initial" animate="animate" key={`comp-${t.id}`} className="comp_card">
+                completed.map(c => (
+                  <motion.div variants={cardVariants} initial="initial" animate="animate" key={`comp-${c.id}`} className="comp_card">
                     <div className="card_top">
                       <div className="dot" style={{backgroundColor: "rgb(70, 255, 70)"}}></div>
-                      <span className="card_title">{t.title}</span>
+                      <span className="card_title">{c.title}</span>
                     <div className="done_del">
                     <motion.button className="del_btn" onClick={() => deleteCompleted(t.id)}
                       whileHover={{scale: 1.09}} whileTap={{scale: 0.9}}><IconTrash size={30} color="powderblue"></IconTrash></motion.button>
                     </div>
                     </div>
-                    <div className="desc">{t.desc}</div>
+                    <div className="desc">{c.desc}</div>
                     <div className="card_bottom">
-                      <span><span style={{color: "powderblue"}}>Priority : </span>{priorityType(t.priority)}</span>
-                      {t.time && <span><span style={{color: "powderblue"}}>Time : </span>{t.time}</span>}
+                      <span><span style={{color: "powderblue"}}>Priority : </span>{priorityType(c.priority)}</span>
+                      {c.time && <span><span style={{color: "powderblue"}}>Time : </span>{c.time}</span>}
                     </div>
                   </motion.div>
                 ))
