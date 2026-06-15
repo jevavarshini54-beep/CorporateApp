@@ -6,15 +6,14 @@ import { useState, useEffect } from "react";
 function ToDo() {
 
   const [tasks, setTasks] = useState([
-    { id: 1, title: "Submit Q2 report", desc: "Compile data and send to manager by EOD", priority: "high", time: "5:00 PM", status: "Completed" },
-    { id: 2, title: "Team standup meeting", desc: "Discuss sprint progress and blockers", priority: "medium", time: "10:00 AM", status: "Not Started" },
-    { id: 3, title: "Review pull requests", desc: "Check and approve 3 pending PRs on GitHub", priority: "medium", time: "", status: "In Progress" },
-    { id: 4, title: "Update project documentation", desc: "Add new API endpoints to the docs", priority: "low", time: "", status: "Not Started" }
+    { id: 1, title: "Team standup meeting", desc: "Discuss sprint progress and blockers", priority: "medium", time: "10:00 AM", status: "Not Started" },
+    { id: 2, title: "Review pull requests", desc: "Check and approve 3 pending PRs on GitHub", priority: "medium", time: "", status: "In Progress" },
+    { id: 3, title: "Update project documentation", desc: "Add new API endpoints to the docs", priority: "low", time: "", status: "Not Started" }
   ]);
 
   const priorityType = (p) => p === "high" ? "High" : p === "medium" ? "Moderate" : "Low";
   const statusColor = (s) => s === "Completed" ? "rgb(70, 255, 70)" : s === "In Progress" ? "rgb(255, 255, 46)" : "red";
-  const [completed, setCompleted] = useState([]);
+  const [completed, setCompleted] = useState([{id: 1, title: "Submit Q2 report", desc: "Compile data and send to manager by EOD", priority: "high", time: "5:00 PM", status: "Completed"}]);
 
   const cardVariants = {initial: {opacity: 0, x: -50},
                         animate: {opacity: 1, x:0, transition: {duration: 0.3, type: "spring", stiffness: 200, damping: 27}},
@@ -22,29 +21,42 @@ function ToDo() {
 
   const containerVariants = {initial: {}, animate: {transition: {staggerChildren: 0.4, delayChildren: 0.4}}};
 
+  const reassignIds = (arr) => arr.map((t, i) => ({ ...t, id: i + 1 }));
+
   const deleteTask = (id) => {
-    setTasks(p => p.filter(t => t.id !==id))
-  }
+    setTasks(prev => reassignIds(prev.filter(t => t.id !== id)))
+  };
 
   const markDone = (id) => {
     const task = tasks.find(t => t.id === id);
     if (!task) return;
-    setTasks(p => p.filter(t => t.id !== id))
+    setTasks(prev => reassignIds(prev.filter(t => t.id !== id)));
     setCompleted(p => [task, ...p])
   };
 
   const deleteCompleted = (id) => {
-    setCompleted(prev => prev.filter(t => t.id !== id));
+    setCompleted(prev => reassignIds(prev.filter(t => t.id !== id)));
   };
 
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    const alreadyDone = tasks.filter(t => t.status === "Completed");
-    const remaining = tasks.filter(t => t.status !== "Completed");
-    if (alreadyDone.length) {
-        setTasks(remaining);
-        setCompleted(alreadyDone);
-    }
+    const savedTasks = localStorage.getItem("worksphere-tasks");
+    const savedCompleted = localStorage.getItem("worksphere-completed");
+
+    if (savedTasks) setTasks(JSON.parse(savedTasks));
+    if (savedCompleted) setCompleted(JSON.parse(savedCompleted));
+    setLoaded(true);
   }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem("worksphere-tasks", JSON.stringify(tasks));
+  }, [tasks, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    localStorage.setItem("worksphere-completed", JSON.stringify(completed));
+  }, [completed, loaded]);
 
   const total = tasks.length + completed.length;
   const compCount = completed.length;
@@ -61,6 +73,34 @@ function ToDo() {
   const inProg_stroke = (inProg_percent*circumference)/100;
   const noStart_stroke = (noStart_percent*circumference)/100;
 
+  // To add a new task
+  const [showForm, setShowForm] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [newPriority, setNewPriority] = useState("moderate");
+  const [newStatus, setNewStatus] = useState("Completed");
+  const [newTime, setNewTime] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+
+  const addTask = () => {
+    if (!newTitle.trim()) return;
+    const new_task = { id: tasks.length + 1, title: newTitle, desc: newDesc, priority: newPriority, time: newTime, status: newStatus };
+
+    if (newStatus === "Completed") {
+      setCompleted(prev => reassignIds([new_task, ...prev]));
+    }
+
+    else{
+      setTasks(prev => reassignIds([new_task, ...prev]));
+    }
+
+    setNewTitle("");
+    setNewDesc("");
+    setNewTime("");
+    setNewPriority("medium");
+    setNewStatus("Not Started");
+    setShowForm(false);
+  };
+
   return (
     <motion.div className="todo_page" initial={{opacity: 0, y: 40}} animate={{opacity: 1, y: 0}} transition={{duration: 0.8, ease: "easeOut"}}>
       <div className="left_panel">
@@ -69,13 +109,42 @@ function ToDo() {
             <div className="panel_title">To-Do</div>
             <div className="panel_day">•Today</div>
           </div>
-          <motion.button className="add_task_btn" whileHover={{scale: 1.07}}>+ Add Task</motion.button>
+          <motion.button className="add_task_btn" whileHover={{scale: 1.07}} onClick={() => setShowForm(true)}>+ Add Task</motion.button>
         </div>
+        <AnimatePresence>
+          {showForm && (
+            <motion.div initial={{opacity: 0, y: -20, scale: 0.95}} animate={{opacity: 1, y: 0, scale: 1}}
+            exit={{opacity: 0, y: -20, scale: 0.95}} transition={{duration: 0.7, type: "spring", stiffness: 300, damping: 44}} className="form">
+              <label className="labels">Task Title</label>
+              <input className="form_input" type="input" placeholder="Task Title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)}></input>
+              <label className="labels">Description</label>
+              <input className="form_input" type="input" placeholder="Description of your task" value={newDesc} onChange={(e) => setNewDesc(e.target.value)}></input>
+              <label className="labels">Time</label>
+              <input className="form_input" type="input" placeholder="(eg: 4: 40 PM)" value={newTime} onChange={(e) => setNewTime(e.target.value)}></input>
+              <label className="labels">Priority</label>
+              <select className="form_select" value={newPriority} onChange={(e) => setNewPriority(e.target.value)}>
+                <option value="high">High</option>
+                <option value="medium">Moderate</option>
+                <option value="low">Low</option>
+              </select>
+              <label className="labels">Status</label>
+              <select className="form_select" value={newStatus} onChange={(e) => setNewStatus(e.target.value)}>
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <div className="confirm_cancel">
+                <motion.button onClick={() => {addTask(); setShowForm(false)}} className="form_btn" whileHover={{scale: 1.1, y: 10, x: 10}} whileTap={{scale: 0.9, y: 15, x: 10}}>Confirm</motion.button>
+                <motion.button onClick={() => setShowForm(false)} className="form_btn" whileHover={{scale: 1.1, y: 10, x: 10}} whileTap={{scale: 0.9, y: 15, x: 10}}>Cancel</motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div variants={containerVariants} initial="initial" animate="animate">
           <AnimatePresence>
             {tasks.map(t => (
-              <motion.div key= {t.id} variants={cardVariants} initial="initial" animate="animate" className="task_card">
+              <motion.div key= {`comp-${t.id}`} variants={cardVariants} initial="initial" animate="animate" className="task_card">
                 <div className="card_top">
                   <div className="dot" style={{backgroundColor: statusColor(t.status)}}></div>
                   <span className="card_title">{t.title}</span>
@@ -141,7 +210,7 @@ function ToDo() {
                 No completed tasks yet
               </motion.p>) : (
                 completed.map(t => (
-                  <motion.div variants={cardVariants} initial="initial" animate="animate" key={t.id} className="comp_card">
+                  <motion.div variants={cardVariants} initial="initial" animate="animate" key={`comp-${t.id}`} className="comp_card">
                     <div className="card_top">
                       <div className="dot" style={{backgroundColor: "rgb(70, 255, 70)"}}></div>
                       <span className="card_title">{t.title}</span>
