@@ -173,7 +173,7 @@ function ToDo() {
               <div className="ring">
                 <svg viewBox="0 0 70 70" width="70" height="70">
                   <circle className="ring_bg" cx="35" cy="35" r={r}></circle>
-                  <circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "red", strokeDasharray: circumference, strokeDashoffset: circumference - noStart_stroke}}></circle>
+                  <motion.circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "red", strokeWidth: 8}} strokeDasharray={circumference} initial={{strokeDashoffset: circumference}} animate={{strokeDashoffset: circumference - noStart_stroke}}></motion.circle>
                 </svg>
                 <div className="ring_pct">{noStart_percent}%</div>
               </div>
@@ -183,7 +183,7 @@ function ToDo() {
               <div className="ring">
                 <svg viewBox="0 0 70 70" width="70" height="70">
                   <circle className="ring_bg" cx="35" cy="35" r={r}></circle>
-                  <circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "rgb(255, 255, 46)", strokeDasharray: circumference, strokeDashoffset: circumference - inProg_stroke}}></circle>
+                  <motion.circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "rgb(255, 255, 46)", strokeWidth: 8}} strokeDasharray={circumference} initial={{strokeDashoffset: circumference}} animate={{strokeDashoffset: circumference - inProg_stroke}} transition={{duration: 1, ease: "easeOut"}}></motion.circle>
                 </svg>
                 <div className="ring_pct">{inProg_percent}%</div>
               </div>
@@ -193,7 +193,7 @@ function ToDo() {
               <div className="ring">
                 <svg viewBox="0 0 70 70" width="70" height="70">
                   <circle className="ring_bg" cx="35" cy="35" r={r}></circle>
-                  <circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "rgb(70,255,70)", strokeDasharray: circumference, strokeDashoffset: circumference - completed_stroke}}></circle>
+                  <motion.circle className="ring_fill" cx="35" cy="35" r={r} style={{stroke: "rgb(70,255,70)", strokeWidth: 8}} strokeDasharray={circumference} initial={{strokeDashoffset: circumference}} animate={{strokeDashoffset: circumference - completed_stroke}} transition={{duration: 1, ease: "easeOut"}}></motion.circle>
                 </svg>
                 <div className="ring_pct">{comp_percent}%</div>
               </div>

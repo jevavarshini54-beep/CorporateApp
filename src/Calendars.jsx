@@ -1,12 +1,59 @@
 import React, { useEffect } from "react";
 import Calendar from "react-calendar";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IconTrash } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import './Calendars.css';
 import { AnimatePresence } from "framer-motion";
 
 function Calendars() {
+
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const Canvas = canvasRef.current;
+    const ctx = Canvas.getContext('2d');
+
+    function reSize() {
+      Canvas.height = window.innerHeight;
+      Canvas.width = window.innerWidth;
+    }
+    reSize();
+
+    window.addEventListener('resize', reSize);
+
+    const particles = Array.from({length : 100}, () => ({
+      x: Math.random()*Canvas.width, y: Math.random()*Canvas.height,
+      r: 1.5 + Math.random()*4, dx: ((Math.random())-0.5)*0.5,
+      dy: -0.2-((Math.random())*0.5), alpha: 0.2 + Math.random() * 0.5,
+      color: Math.random() > 0.5 ? 'powderblue' : 'white'
+    }));
+
+    let animation;
+    function draw() {
+      ctx.clearRect(0, 0, Canvas.width, Canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.y < -p.r) { p.y = Canvas.height + p.r; p.x = Math.random() * Canvas.width; }
+        if (p.x < -p.r) p.x = Canvas.width + p.r;
+        if (p.x > Canvas.width + p.r) p.x = -p.r;
+      });
+      animation = requestAnimationFrame(draw);
+    }
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animation);
+      window.removeEventListener('resize', reSize);
+    };
+  }, []);
 
   const [meet, setMeet] = useState({});
   const [time, setTime] = useState("");
@@ -62,11 +109,13 @@ function Calendars() {
   const [showpopup, setShowpopup] = useState(false);
   const popupVariants = {
     initial: {y: 100, opacity: 0, scale: 0.9},
-    animate: {y:0, opacity: 1, scale:1, transition: {type: "spring", stiffness: 300, damping: 20}}
+    animate: {y:0, opacity: 1, scale:1, transition: {type: "spring", stiffness: 300, damping: 20}},
+    exit: {y: 100, opaity: 0, scale: 0.9, transition: {duration: 0.4}}
   };
 
   return (
     <motion.div className="calendar_page" initial={{ opacity: 0, y: 39 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: "easeOut" }}>
+      <canvas ref={canvasRef} className="canvas_calendar"></canvas>
       <div>
         <Calendar onChange={setDate} value={date} onClickDay={(d) => {setSelectedDate(d); setShowpopup(true);}}
         showNeighboringMonth={false} formatShortWeekday={(locale,date) => (
@@ -77,7 +126,7 @@ function Calendars() {
       <div className="today">
         <AnimatePresence>
           {showpopup && selectedDate && (
-            <motion.div className= "popup" variants={popupVariants} initial="initial" animate="animate">
+            <motion.div className= "popup" variants={popupVariants} initial="initial" animate="animate" exit="exit">
               <div className="top">
 
                 <div className="display">

@@ -184,6 +184,15 @@
 	margin-top: 1rem;
 	color: powderblue;
 	background: transparent;
+	box-shadow: 0 0 35px rgba(176, 224, 230, 0.5);
 	padding: 0.6rem;
 }
 
+.ring svg {
+  transform: rotate(-90deg);
+}
+
+.ring_pct, .chart_label{
+	color: powderblue;
+	font-family: 1.04rem;
+}
