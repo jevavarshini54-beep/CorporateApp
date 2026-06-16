@@ -82,7 +82,7 @@ function ToDo() {
   };
 
   const deleteCompleted = (id) => {
-    setCompleted(prev => reassignIds(prev.filter(t => t.id !== id)));
+    setCompleted(prev => reassignIds(prev.filter(c => c.id !== id)));
   };
 
   const [loaded, setLoaded] = useState(false);
@@ -263,7 +263,7 @@ function ToDo() {
                       <div className="dot" style={{backgroundColor: "rgb(70, 255, 70)"}}></div>
                       <span className="card_title">{c.title}</span>
                     <div className="done_del">
-                    <motion.button className="del_btn" onClick={() => deleteCompleted(t.id)}
+                    <motion.button className="del_btn" onClick={() => deleteCompleted(c.id)}
                       whileHover={{scale: 1.09}} whileTap={{scale: 0.9}}><IconTrash size={30} color="powderblue"></IconTrash></motion.button>
                     </div>
                     </div>
