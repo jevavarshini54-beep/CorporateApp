@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
 import Calendars from "./Calendars";
-import ToDo from "./Todo";
+import Todo from "./Todo";
 
 function App() {
 
