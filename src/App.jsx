@@ -3,7 +3,7 @@ import { HashRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Landing from "./Landing";
 import NotFound from "./NotFound";
 import Calendars from "./Calendars";
-import ToDo from "./ToDo";
+import ToDo from "./Todo";
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/calendars" element={<Calendars />} />
-        <Route path="/todos" element={<ToDo />} />
+        <Route path="/todos" element={<Todo />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>
